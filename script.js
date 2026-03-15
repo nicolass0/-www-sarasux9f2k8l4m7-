@@ -5,6 +5,7 @@ function randomIP(){
 return Math.floor(Math.random()*255)+"."+Math.floor(Math.random()*255)+"."+Math.floor(Math.random()*255)+"."+Math.floor(Math.random()*255);
 }
 
+// NAVIGAZIONE
 function entra(){
 document.getElementById("warning").style.display="none";
 document.getElementById("register").classList.remove("hidden");
@@ -62,7 +63,7 @@ function startHack(nome){
 document.getElementById("login").style.display="none";
 document.getElementById("hacker").classList.remove("hidden");
 
-// MATRIX CANVAS
+// MATRIX
 matrixEffect();
 
 // TERMINALI CASUALI
@@ -85,7 +86,9 @@ let terminals=[
 ];
 
 terminals.forEach((t,i)=>{
-setTimeout(()=>creaTerminale(Math.random()*600,Math.random()*350,t[0],t[1]),i*800);
+setTimeout(()=>{
+creaTerminale(Math.random()*700,Math.random()*350,t[0],t[1]);
+},i*700);
 });
 
 // BARRA DI CARICAMENTO
