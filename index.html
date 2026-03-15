@@ -2,7 +2,7 @@
 <html lang="it">
 <head>
 <meta charset="UTF-8">
-<title>LukiPup - Accesso</title>
+<title>LukiPup - Hacker Simulation</title>
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -15,7 +15,7 @@
 <button onclick="esci()">ESCI</button>
 </div>
 
-<!-- REGISTRAZIONE -->
+<!-- REGISTER -->
 <div id="register" class="hidden">
 <h2>Registrazione</h2>
 <input id="regName" placeholder="Nome">
@@ -29,13 +29,14 @@
 <div id="login" class="hidden">
 <h2>Login</h2>
 <input id="logName" placeholder="Nome">
-<input id="logPass" type="password" placeholder="Password">
+<input id="logPass" type="password">
 <button onclick="login()">Accedi</button>
 </div>
 
 <!-- HACKING -->
 <div id="hacker" class="hidden">
 <h1>TRACCIAMENTO SOGGETTO</h1>
+<div id="matrix"></div>
 <div id="terminals"></div>
 <div class="progress">
 <div id="bar"></div>
@@ -53,6 +54,9 @@ Nessun dato reale è stato salvato.<br>
 Il sistema è solo per effetto scenico.
 </p>
 </div>
+
+<!-- Suono tastiera -->
+<audio id="typeSound" src="https://www.soundjay.com/button/sounds/button-16.mp3"></audio>
 
 <script src="script.js"></script>
 </body>
