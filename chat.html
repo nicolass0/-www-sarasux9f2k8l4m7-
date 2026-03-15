@@ -9,10 +9,12 @@
 <body>
 
 <div id="container">
-    <h1>Chat 1vs1</h1>
+    <h1>Chat 1vs1 Stile OmiGol</h1>
     <div id="chat-box" style="height:300px; overflow:auto; border:1px solid black; padding:5px; margin-bottom:10px; background:white;"></div>
     <input type="text" id="message" placeholder="Scrivi un messaggio...">
     <button onclick="sendMessage()">Invia</button>
+    <button onclick="skipChat()" style="background:red;">Skip / Nuovo partner</button>
+    <p id="partner-info"></p>
 </div>
 
 <script>
@@ -22,15 +24,39 @@ let currentUser = users.find(u=>u.email===currentUserEmail);
 if(!currentUser || !currentUser.profile){ alert("Completa il profilo!"); window.location.href="profile.html"; }
 
 let messages = JSON.parse(localStorage.getItem('messages')) || {};
+let chatPartnerEmail = null;
 
-let chatPartnerEmail = users.find(u=>u.email!==currentUserEmail)?.email;
-if(!chatPartnerEmail){ alert("Nessun altro utente online!"); }
+function getAvailablePartners(){
+    return users.filter(u=>u.email!==currentUserEmail);
+}
+
+function pickRandomPartner(){
+    let partners = getAvailablePartners();
+    if(partners.length===0){ 
+        alert("Nessun utente disponibile al momento!"); 
+        document.getElementById('partner-info').innerText="";
+        document.getElementById('chat-box').innerHTML="";
+        return null;
+    }
+    let random = partners[Math.floor(Math.random()*partners.length)];
+    return random.email;
+}
+
+function loadPartner(email){
+    chatPartnerEmail = email;
+    let partner = users.find(u=>u.email===chatPartnerEmail);
+    document.getElementById('partner-info').innerText = `Chat con ${partner.profile.nick} ${partner.profile.tag}`;
+    loadMessages();
+}
+
+function getChatKey(a,b){ return [a,b].sort().join("_"); }
 
 function loadMessages(){
-    let chatKey = getChatKey(currentUserEmail, chatPartnerEmail);
     let chatBox = document.getElementById('chat-box');
     chatBox.innerHTML="";
-    let msgs = messages[chatKey] || [];
+    if(!chatPartnerEmail) return;
+    let key = getChatKey(currentUserEmail, chatPartnerEmail);
+    let msgs = messages[key] || [];
     msgs.forEach(m=>{
         let div = document.createElement('div');
         div.innerHTML=`<b>${m.from}:</b> ${m.text}`;
@@ -39,9 +65,8 @@ function loadMessages(){
     chatBox.scrollTop = chatBox.scrollHeight;
 }
 
-function getChatKey(a,b){ return [a,b].sort().join("_"); }
-
 function sendMessage(){
+    if(!chatPartnerEmail) return;
     let text = document.getElementById('message').value;
     if(!text) return;
     let key = getChatKey(currentUserEmail, chatPartnerEmail);
@@ -52,7 +77,24 @@ function sendMessage(){
     loadMessages();
 }
 
-window.onload = loadMessages;
+function skipChat(){
+    if(!chatPartnerEmail) return;
+    let confirmSkip = confirm("Vuoi davvero cambiare partner? La chat corrente verrà cancellata!");
+    if(confirmSkip){
+        let key = getChatKey(currentUserEmail, chatPartnerEmail);
+        messages[key] = []; // cancella messaggi
+        localStorage.setItem('messages', JSON.stringify(messages));
+        let nextPartner = pickRandomPartner();
+        if(nextPartner) loadPartner(nextPartner);
+        else alert("Nessun altro utente disponibile!");
+    }
+}
+
+// All'avvio scegli partner casuale
+window.onload = function(){
+    let partner = pickRandomPartner();
+    if(partner) loadPartner(partner);
+}
 </script>
 </body>
 </html>
