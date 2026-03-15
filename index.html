@@ -1,1 +1,61 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<title>LukiPup Accesso</title>
+<link rel="stylesheet" href="style.css">
+</head>
 
+<body>
+
+<div id="warning">
+<h1>⚠ LukiPup</h1>
+<p>Sei sicuro di voler accedere a questo sito?</p>
+<button onclick="accetta()">ACCETTA</button>
+<button onclick="esci()">ESCI</button>
+</div>
+
+<div id="auth" class="hidden">
+
+<h2>Registrazione</h2>
+<input id="regName" placeholder="Nome">
+<input id="regPass" placeholder="Password" type="password">
+<button onclick="register()">Registrati</button>
+
+<h2>Login</h2>
+<input id="logName" placeholder="Nome">
+<input id="logPass" placeholder="Password" type="password">
+<button onclick="login()">Login</button>
+
+</div>
+
+<div id="hacker" class="hidden">
+
+<h1 class="hackerTitle">TRACCIAMENTO SOGGETTO</h1>
+
+<div class="cards">
+<div class="card">IP: SCANSIONE...</div>
+<div class="card">POSIZIONE: RICERCA...</div>
+<div class="card">DATABASE: ACCESSO...</div>
+<div class="card">FILE: DOWNLOAD...</div>
+<div class="card">IDENTITÀ: ANALISI...</div>
+<div class="card">RETE: MONITOR...</div>
+</div>
+
+<div class="progressBar">
+<div id="bar"></div>
+</div>
+
+<p id="status"></p>
+
+</div>
+
+<div id="final" class="hidden">
+<h1>GRAZIE PER I DATI PERSONALI</h1>
+<p>Sessione terminata</p>
+</div>
+
+<script src="script.js"></script>
+
+</body>
+</html>
