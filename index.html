@@ -2,62 +2,27 @@
 <html lang="it">
 <head>
 <meta charset="UTF-8">
-<title>LukiPup - Hacker Simulation</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LukiPup Secure Terminal</title>
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<!-- AVVISO -->
-<div id="warning">
-<h1>LukiPup</h1>
-<p>Sei sicuro di voler accedere a questo sito?</p>
-<button onclick="entra()">ACCETTA</button>
-<button onclick="esci()">ESCI</button>
-</div>
+<canvas id="matrix"></canvas>
 
-<!-- REGISTER -->
-<div id="register" class="hidden">
-<h2>Registrazione</h2>
-<input id="regName" placeholder="Nome">
-<input id="regPass" type="password" placeholder="Password">
-<button onclick="register()">Registrati</button>
-<p>Hai già un account?</p>
-<button onclick="vaiLogin()">Vai al Login</button>
-</div>
+<h1>SECURE TERMINAL</h1>
 
-<!-- LOGIN -->
-<div id="login" class="hidden">
-<h2>Login</h2>
-<input id="logName" placeholder="Nome">
-<input id="logPass" type="password">
-<button onclick="login()">Accedi</button>
-</div>
-
-<!-- HACKING -->
-<div id="hacker" class="hidden">
-<h1>TRACCIAMENTO SOGGETTO</h1>
-<div id="matrix"></div>
 <div id="terminals"></div>
+
+<div id="console"></div>
+
 <div class="progress">
 <div id="bar"></div>
 </div>
-<p id="status"></p>
-</div>
 
-<!-- FINALE -->
-<div id="final" class="hidden">
-<h1>GRAZIE PER I DATI PERSONALI</h1>
-<p>
-Ciao DS!<br>
-Non preoccuparti, tutto era solo una simulazione.<br>
-Nessun dato reale è stato salvato.<br>
-Il sistema è solo per effetto scenico.
-</p>
-</div>
-
-<!-- Suono tastiera -->
 <audio id="typeSound" src="https://www.soundjay.com/button/sounds/button-16.mp3"></audio>
 
 <script src="script.js"></script>
+
 </body>
 </html>
