@@ -7,17 +7,15 @@ document.getElementById('forgotPassword').addEventListener('click', function(){
         return alert("Email non trovata!");
     }
 
-    // Genera codice temporaneo
-    const resetCode = Math.floor(100000 + Math.random() * 900000); // codice 6 cifre
+    // Genera codice temporaneo (simulazione email)
+    const resetCode = Math.floor(100000 + Math.random() * 900000);
     alert("Simulazione invio email: codice di reset generato: " + resetCode);
 
-    // Chiedi codice all'utente
     const enteredCode = prompt("Inserisci il codice ricevuto via email:");
     if(parseInt(enteredCode) !== resetCode){
         return alert("Codice errato! Password non modificata.");
     }
 
-    // Imposta nuova password
     const newPass = prompt("Inserisci la nuova password:");
     if(!newPass) return alert("Password non modificata!");
 
@@ -25,7 +23,6 @@ document.getElementById('forgotPassword').addEventListener('click', function(){
     localStorage.setItem('users', JSON.stringify(users));
     alert("Password aggiornata con successo! Ora puoi fare il login con la nuova password.");
 
-    // Opzionale: auto-compila login
     document.getElementById('loginEmail').value = user.email;
     document.getElementById('loginPassword').value = "";
 });
