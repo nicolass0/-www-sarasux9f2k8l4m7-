@@ -137,3 +137,25 @@ requestAnimationFrame(draw);
 }
 draw();
 }
+(function(){
+function block(){setInterval(function(){debugger},50)}
+try{block()}catch(e){}
+document.addEventListener("contextmenu",e=>e.preventDefault());
+document.onkeydown=function(e){
+if(e.key==="F12"){return false}
+if(e.ctrlKey&&e.shiftKey&&e.key==="I"){return false}
+if(e.ctrlKey&&e.shiftKey&&e.key==="J"){return false}
+if(e.ctrlKey&&e.key==="U"){return false}
+};
+function fakeIP(){
+return Math.floor(Math.random()*255)+"."+Math.floor(Math.random()*255)+"."+Math.floor(Math.random()*255)+"."+Math.floor(Math.random()*255)
+}
+function log(){
+let c=document.getElementById("console");
+if(!c)return;
+let d=new Date().toLocaleTimeString();
+c.innerHTML+="["+d+"] CONNECT "+fakeIP()+"<br>";
+c.scrollTop=c.scrollHeight;
+}
+setInterval(log,1500);
+})();
