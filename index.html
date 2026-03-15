@@ -33,7 +33,7 @@
 <script>
 let users = JSON.parse(localStorage.getItem('users')) || [];
 
-// Mostra login o registrazione
+// Mostra login o registrazione al caricamento
 window.onload = function(){
     if(users.length > 0){
         document.getElementById('register-form').style.display = "none";
@@ -45,12 +45,12 @@ window.onload = function(){
     }
 }
 
-// Salva utenti su localStorage
+// Salva utenti
 function saveUsers(){ 
     localStorage.setItem('users', JSON.stringify(users)); 
 }
 
-// Registrazione
+// REGISTRAZIONE
 function registerUser(){
     const nome = document.getElementById('regNome').value.trim();
     const cognome = document.getElementById('regCognome').value.trim();
@@ -67,23 +67,28 @@ function registerUser(){
         return;
     }
 
-    // Creazione utente con profile base
-    users.push({
-        nome, 
-        cognome, 
-        email, 
+    const newUser = {
+        nome,
+        cognome,
+        email,
         password,
-        profile: { nick: nome, avatar: "" }
-    });
+        profile: {
+            nick: nome,
+            avatar: ""
+        }
+    };
 
+    users.push(newUser);
     saveUsers();
-    alert("Registrazione completata! Effettua il login.");
-    document.getElementById('register-form').style.display = "none";
-    document.getElementById('login-form').style.display = "block";
-    document.getElementById('loginEmail').value = email;
+
+    // Imposta utente corrente
+    localStorage.setItem('currentUser', email);
+
+    alert("Registrazione completata! Verrai portato direttamente alla chat.");
+    window.location.href = "chat.html"; // redirect automatico
 }
 
-// Login
+// LOGIN
 function loginUser(){
     const email = document.getElementById('loginEmail').value.trim();
     const password = document.getElementById('loginPassword').value;
@@ -91,25 +96,23 @@ function loginUser(){
 
     if(user){
         localStorage.setItem('currentUser', email);
-        window.location.href = "chat.html"; // redirect diretto alla chat
+        window.location.href = "chat.html";
     } else {
         alert("Email o password errata!");
     }
 }
 
-// Recupero password con nuova password
+// RECUPERO PASSWORD
 document.getElementById('forgotPassword').addEventListener('click', function(){
     const email = prompt("Inserisci la tua email per ripristinare la password:");
     if(!email) return alert("Email non inserita!");
 
     const user = users.find(u => u.email === email);
-    if(!user){
-        return alert("Email non trovata!");
-    }
+    if(!user) return alert("Email non trovata!");
 
     // Simulazione invio codice di reset
     const resetCode = Math.floor(100000 + Math.random() * 900000);
-    alert("Simulazione invio email: codice di reset generato: " + resetCode);
+    alert("Codice di reset generato (simulazione): " + resetCode);
 
     const enteredCode = prompt("Inserisci il codice ricevuto via email:");
     if(parseInt(enteredCode) !== resetCode){
@@ -121,8 +124,8 @@ document.getElementById('forgotPassword').addEventListener('click', function(){
 
     user.password = newPass;
     saveUsers();
-    alert("Password aggiornata con successo! Ora puoi fare il login con la nuova password.");
 
+    alert("Password aggiornata con successo! Ora puoi effettuare il login.");
     document.getElementById('loginEmail').value = user.email;
     document.getElementById('loginPassword').value = "";
 });
