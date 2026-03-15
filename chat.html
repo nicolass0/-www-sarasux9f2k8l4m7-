@@ -1,1 +1,58 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chat Serpendino Geam</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
 
+<div id="container">
+    <h1>Chat 1vs1</h1>
+    <div id="chat-box" style="height:300px; overflow:auto; border:1px solid black; padding:5px; margin-bottom:10px; background:white;"></div>
+    <input type="text" id="message" placeholder="Scrivi un messaggio...">
+    <button onclick="sendMessage()">Invia</button>
+</div>
+
+<script>
+let users = JSON.parse(localStorage.getItem('users')) || [];
+let currentUserEmail = localStorage.getItem('currentUser');
+let currentUser = users.find(u=>u.email===currentUserEmail);
+if(!currentUser || !currentUser.profile){ alert("Completa il profilo!"); window.location.href="profile.html"; }
+
+let messages = JSON.parse(localStorage.getItem('messages')) || {};
+
+let chatPartnerEmail = users.find(u=>u.email!==currentUserEmail)?.email;
+if(!chatPartnerEmail){ alert("Nessun altro utente online!"); }
+
+function loadMessages(){
+    let chatKey = getChatKey(currentUserEmail, chatPartnerEmail);
+    let chatBox = document.getElementById('chat-box');
+    chatBox.innerHTML="";
+    let msgs = messages[chatKey] || [];
+    msgs.forEach(m=>{
+        let div = document.createElement('div');
+        div.innerHTML=`<b>${m.from}:</b> ${m.text}`;
+        chatBox.appendChild(div);
+    });
+    chatBox.scrollTop = chatBox.scrollHeight;
+}
+
+function getChatKey(a,b){ return [a,b].sort().join("_"); }
+
+function sendMessage(){
+    let text = document.getElementById('message').value;
+    if(!text) return;
+    let key = getChatKey(currentUserEmail, chatPartnerEmail);
+    if(!messages[key]) messages[key]=[];
+    messages[key].push({from:currentUser.profile.nick, text});
+    localStorage.setItem('messages', JSON.stringify(messages));
+    document.getElementById('message').value="";
+    loadMessages();
+}
+
+window.onload = loadMessages;
+</script>
+</body>
+</html>
