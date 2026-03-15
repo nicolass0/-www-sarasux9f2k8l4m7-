@@ -3,13 +3,141 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sarasux Serpendino Geam</title>
+    <title>Serpendino Geam</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <h1>Benvenuto nel Serpendino Geam</h1>
-    <p>Accesso riservato: decifra il pattern <strong>x7v2q1t8</strong></p>
+    <div id="container">
 
-    <button onclick="alert('Codice segreto: x7v2q1t8')">Mostra codice</button>
+        <!-- INTERFACCIA REGISTER / LOGIN -->
+        <div id="login-register">
+            <h1>Benvenuto al Serpendino Geam</h1>
+            
+            <div id="register-form">
+                <h2>Register</h2>
+                <input type="text" id="regNome" placeholder="Nome">
+                <input type="text" id="regCognome" placeholder="Cognome">
+                <input type="email" id="regEmail" placeholder="Email">
+                <input type="password" id="regPassword" placeholder="Password">
+                <button onclick="registerUser()">Registrati</button>
+            </div>
+
+            <div id="login-form">
+                <h2>Login</h2>
+                <input type="email" id="loginEmail" placeholder="Email">
+                <input type="password" id="loginPassword" placeholder="Password">
+                <button onclick="loginUser()">Login</button>
+            </div>
+        </div>
+
+        <!-- AREA GIOCO -->
+        <canvas id="game" width="400" height="400"></canvas>
+
+    </div>
+
+<script>
+// STORAGE FINTIZIO DEGLI UTENTI
+let users = [];
+
+function registerUser() {
+    const nome = document.getElementById('regNome').value;
+    const cognome = document.getElementById('regCognome').value;
+    const email = document.getElementById('regEmail').value;
+    const password = document.getElementById('regPassword').value;
+
+    if(!nome || !cognome || !email || !password){
+        alert("Compila tutti i campi!");
+        return;
+    }
+
+    users.push({nome, cognome, email, password});
+    alert("Registrazione avvenuta con successo!");
+}
+
+function loginUser() {
+    const email = document.getElementById('loginEmail').value;
+    const password = document.getElementById('loginPassword').value;
+
+    const user = users.find(u => u.email === email && u.password === password);
+
+    if(user){
+        document.getElementById('login-register').style.display = "none";
+        document.getElementById('game').style.display = "block";
+        startGame();
+    } else {
+        alert("Email o password errata!");
+    }
+}
+
+/* ======= GIOCO SERPENTE ======= */
+
+let canvas = document.getElementById('game');
+let ctx = canvas.getContext('2d');
+
+canvas.style.display = "none"; // nascosto finché non loggano
+
+let snake, food, direction;
+
+function startGame(){
+    snake = [{x: 10, y:10}];
+    direction = "RIGHT";
+    food = {x: Math.floor(Math.random()*20), y: Math.floor(Math.random()*20)};
+    document.addEventListener('keydown', changeDirection);
+    gameLoop();
+}
+
+function gameLoop(){
+    ctx.fillStyle = "black";
+    ctx.fillRect(0,0,canvas.width,canvas.height);
+
+    // Muove serpente
+    let head = {...snake[0]};
+    if(direction==="RIGHT") head.x++;
+    if(direction==="LEFT") head.x--;
+    if(direction==="UP") head.y--;
+    if(direction==="DOWN") head.y++;
+
+    snake.unshift(head);
+
+    // Controlla se mangia cibo
+    if(head.x === food.x && head.y === food.y){
+        food = {x: Math.floor(Math.random()*20), y: Math.floor(Math.random()*20)};
+    } else {
+        snake.pop();
+    }
+
+    // Disegna serpente
+    ctx.fillStyle = "lime";
+    snake.forEach(segment => ctx.fillRect(segment.x*20, segment.y*20, 20, 20));
+
+    // Disegna cibo
+    ctx.fillStyle = "red";
+    ctx.fillRect(food.x*20, food.y*20, 20, 20);
+
+    // Controlla collisioni
+    if(head.x<0 || head.x>=20 || head.y<0 || head.y>=20 || snakeCollision(head)){
+        alert("Game Over!");
+        canvas.style.display = "none";
+        document.getElementById('login-register').style.display = "block";
+        return;
+    }
+
+    setTimeout(gameLoop, 200);
+}
+
+function snakeCollision(head){
+    for(let i=1;i<snake.length;i++){
+        if(snake[i].x === head.x && snake[i].y === head.y) return true;
+    }
+    return false;
+}
+
+function changeDirection(e){
+    if(e.key==="w" && direction!=="DOWN") direction="UP";
+    if(e.key==="s" && direction!=="UP") direction="DOWN";
+    if(e.key==="a" && direction!=="RIGHT") direction="LEFT";
+    if(e.key==="d" && direction!=="LEFT") direction="RIGHT";
+}
+</script>
 </body>
 </html>
