@@ -1,39 +1,37 @@
-body {
-    background-color: black;
-    color: lime;
-    font-family: monospace;
-    text-align: center;
+body{
+    background:black;
+    color:lime;
+    font-family:monospace;
+    text-align:center;
 }
 
-#container {
-    width: 450px;
-    margin: 50px auto;
-    border: 2px solid lime;
-    padding: 20px;
-    border-radius: 10px;
+#container{
+    width:450px;
+    margin:50px auto;
+    border:2px solid lime;
+    padding:20px;
+    border-radius:10px;
 }
 
-/* POPUP PROFESSIONALE */
-#popup {
-    position: fixed;
+#popup{
+    position:fixed;
     top:0; left:0;
     width:100%; height:100%;
     background: rgba(0,0,0,0.95);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 100;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    z-index:100;
 }
 
-#popup-content {
+#popup-content{
     background:black;
-    border: 2px solid lime;
+    border:2px solid lime;
     padding:30px;
     border-radius:10px;
 }
 
-/* FORM LOGIN/REGISTER */
-input {
+input{
     display:block;
     margin:10px auto;
     padding:10px;
@@ -44,21 +42,15 @@ input {
     color:lime;
 }
 
-button {
+button{
     padding:10px 20px;
     margin:10px;
-    background-color: darkgreen;
+    background-color:darkgreen;
     color:white;
     border:none;
     cursor:pointer;
 }
-button:hover {
-    background-color: green;
-}
+button:hover{ background-color:green; }
 
-/* CANVAS GIOCO */
-#game {
-    display:none;
-    border:none;
-    margin-top:20px;
-}
+#game{ display:none; border:none; margin-top:20px; }
+#score-container{ display:none; margin-bottom:10px; font-size:18px; }
