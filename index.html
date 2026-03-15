@@ -2,47 +2,58 @@
 <html lang="it">
 <head>
 <meta charset="UTF-8">
-<title>LukiPup Accesso</title>
+<title>LukiPup</title>
 <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
+<!-- AVVISO -->
 <div id="warning">
-<h1>⚠ LukiPup</h1>
+<h1>LukiPup</h1>
 <p>Sei sicuro di voler accedere a questo sito?</p>
-<button onclick="accetta()">ACCETTA</button>
+<button onclick="entra()">ACCETTA</button>
 <button onclick="esci()">ESCI</button>
 </div>
 
-<div id="auth" class="hidden">
-
+<!-- REGISTER -->
+<div id="register" class="hidden">
 <h2>Registrazione</h2>
+
 <input id="regName" placeholder="Nome">
-<input id="regPass" placeholder="Password" type="password">
+<input id="regPass" type="password" placeholder="Password">
+
 <button onclick="register()">Registrati</button>
 
-<h2>Login</h2>
-<input id="logName" placeholder="Nome">
-<input id="logPass" placeholder="Password" type="password">
-<button onclick="login()">Login</button>
-
+<p>Hai già un account?</p>
+<button onclick="vaiLogin()">Vai al Login</button>
 </div>
 
+<!-- LOGIN -->
+<div id="login" class="hidden">
+<h2>Login</h2>
+
+<input id="logName" placeholder="Nome">
+<input id="logPass" type="password" placeholder="Password">
+
+<button onclick="login()">Accedi</button>
+</div>
+
+<!-- HACKING -->
 <div id="hacker" class="hidden">
 
-<h1 class="hackerTitle">TRACCIAMENTO SOGGETTO</h1>
+<h1 class="title">TRACCIAMENTO SOGGETTO</h1>
 
 <div class="cards">
-<div class="card">IP: SCANSIONE...</div>
-<div class="card">POSIZIONE: RICERCA...</div>
-<div class="card">DATABASE: ACCESSO...</div>
-<div class="card">FILE: DOWNLOAD...</div>
-<div class="card">IDENTITÀ: ANALISI...</div>
-<div class="card">RETE: MONITOR...</div>
+<div class="card">IP SCAN...</div>
+<div class="card">DATABASE...</div>
+<div class="card">POSIZIONE...</div>
+<div class="card">RETE...</div>
+<div class="card">FILE...</div>
+<div class="card">ACCESSO...</div>
 </div>
 
-<div class="progressBar">
+<div class="progress">
 <div id="bar"></div>
 </div>
 
@@ -50,9 +61,17 @@
 
 </div>
 
+<!-- FINALE -->
 <div id="final" class="hidden">
-<h1>GRAZIE PER I DATI PERSONALI</h1>
-<p>Sessione terminata</p>
+
+<h1>Grazie per i dati personali</h1>
+
+<p>
+Tranquillo DS.<br>
+Questa era solo una simulazione.<br>
+Nessun dato è stato salvato.
+</p>
+
 </div>
 
 <script src="script.js"></script>
