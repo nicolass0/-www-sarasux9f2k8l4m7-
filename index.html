@@ -2,10 +2,9 @@
 <html lang="it">
 <head>
 <meta charset="UTF-8">
-<title>LukiPup</title>
+<title>LukiPup - Accesso</title>
 <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
 
 <!-- AVVISO -->
@@ -16,15 +15,12 @@
 <button onclick="esci()">ESCI</button>
 </div>
 
-<!-- REGISTER -->
+<!-- REGISTRAZIONE -->
 <div id="register" class="hidden">
 <h2>Registrazione</h2>
-
 <input id="regName" placeholder="Nome">
 <input id="regPass" type="password" placeholder="Password">
-
 <button onclick="register()">Registrati</button>
-
 <p>Hai già un account?</p>
 <button onclick="vaiLogin()">Vai al Login</button>
 </div>
@@ -32,49 +28,32 @@
 <!-- LOGIN -->
 <div id="login" class="hidden">
 <h2>Login</h2>
-
 <input id="logName" placeholder="Nome">
 <input id="logPass" type="password" placeholder="Password">
-
 <button onclick="login()">Accedi</button>
 </div>
 
 <!-- HACKING -->
 <div id="hacker" class="hidden">
-
-<h1 class="title">TRACCIAMENTO SOGGETTO</h1>
-
-<div class="cards">
-<div class="card">IP SCAN...</div>
-<div class="card">DATABASE...</div>
-<div class="card">POSIZIONE...</div>
-<div class="card">RETE...</div>
-<div class="card">FILE...</div>
-<div class="card">ACCESSO...</div>
-</div>
-
+<h1>TRACCIAMENTO SOGGETTO</h1>
+<div id="terminals"></div>
 <div class="progress">
 <div id="bar"></div>
 </div>
-
 <p id="status"></p>
-
 </div>
 
 <!-- FINALE -->
 <div id="final" class="hidden">
-
-<h1>Grazie per i dati personali</h1>
-
+<h1>GRAZIE PER I DATI PERSONALI</h1>
 <p>
-Tranquillo DS.<br>
-Questa era solo una simulazione.<br>
-Nessun dato è stato salvato.
+Ciao DS!<br>
+Non preoccuparti, tutto era solo una simulazione.<br>
+Nessun dato reale è stato salvato.<br>
+Il sistema è solo per effetto scenico.
 </p>
-
 </div>
 
 <script src="script.js"></script>
-
 </body>
 </html>
