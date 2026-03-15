@@ -33,6 +33,7 @@
 <script>
 let users = JSON.parse(localStorage.getItem('users')) || [];
 
+// Mostra login o registrazione
 window.onload = function(){
     if(users.length > 0){
         document.getElementById('register-form').style.display = "none";
@@ -66,7 +67,15 @@ function registerUser(){
         return;
     }
 
-    users.push({nome, cognome, email, password});
+    // Creazione utente con profile base
+    users.push({
+        nome, 
+        cognome, 
+        email, 
+        password,
+        profile: { nick: nome, avatar: "" }
+    });
+
     saveUsers();
     alert("Registrazione completata! Effettua il login.");
     document.getElementById('register-form').style.display = "none";
@@ -82,28 +91,40 @@ function loginUser(){
 
     if(user){
         localStorage.setItem('currentUser', email);
-        window.location.href = "profile.html"; // qui puoi cambiare con la tua pagina profilo
+        window.location.href = "chat.html"; // redirect diretto alla chat
     } else {
         alert("Email o password errata!");
     }
 }
 
-// Recupero password sicuro
+// Recupero password con nuova password
 document.getElementById('forgotPassword').addEventListener('click', function(){
-    const email = prompt("Inserisci la tua email per recuperare la password:");
+    const email = prompt("Inserisci la tua email per ripristinare la password:");
     if(!email) return alert("Email non inserita!");
 
     const user = users.find(u => u.email === email);
-    if(user){
-        // Chiedi di impostare nuova password
-        const newPass = prompt("Inserisci la nuova password per il tuo account:");
-        if(!newPass) return alert("Password non modificata!");
-        user.password = newPass;
-        saveUsers();
-        alert("Password aggiornata! Ora puoi effettuare il login con la nuova password.");
-    } else {
-        alert("Email non trovata!");
+    if(!user){
+        return alert("Email non trovata!");
     }
+
+    // Simulazione invio codice di reset
+    const resetCode = Math.floor(100000 + Math.random() * 900000);
+    alert("Simulazione invio email: codice di reset generato: " + resetCode);
+
+    const enteredCode = prompt("Inserisci il codice ricevuto via email:");
+    if(parseInt(enteredCode) !== resetCode){
+        return alert("Codice errato! Password non modificata.");
+    }
+
+    const newPass = prompt("Inserisci la nuova password:");
+    if(!newPass) return alert("Password non modificata!");
+
+    user.password = newPass;
+    saveUsers();
+    alert("Password aggiornata con successo! Ora puoi fare il login con la nuova password.");
+
+    document.getElementById('loginEmail').value = user.email;
+    document.getElementById('loginPassword').value = "";
 });
 </script>
 
