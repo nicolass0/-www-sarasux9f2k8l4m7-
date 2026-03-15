@@ -1,1 +1,14 @@
+document.getElementById('forgotPassword').addEventListener('click', function(){
+    const email = prompt("Inserisci la tua email per recuperare la password:");
+    if(!email) return alert("Email non inserita!");
 
+    const user = users.find(u => u.email === email);
+    if(user){
+        alert("La tua password è: " + user.password);
+        // opzionale: puoi anche far compilare automaticamente il login
+        document.getElementById('loginEmail').value = user.email;
+        document.getElementById('loginPassword').value = user.password;
+    } else {
+        alert("Email non trovata!");
+    }
+});
