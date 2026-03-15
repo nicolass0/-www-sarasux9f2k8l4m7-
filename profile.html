@@ -11,7 +11,7 @@
 <div id="container">
     <h1>Profilo Utente</h1>
     <input type="text" id="nick" placeholder="Nickname">
-    <input type="text" id="tag" placeholder="Tag (es: #1234)">
+    <input type="text" id="tag" placeholder="Tag (#1234)">
     <input type="file" id="avatar">
     <button onclick="saveProfile()">Salva Profilo</button>
 </div>
@@ -21,8 +21,9 @@ let users = JSON.parse(localStorage.getItem('users')) || [];
 let currentUserEmail = localStorage.getItem('currentUser');
 let currentUser = users.find(u=>u.email===currentUserEmail);
 
+if(!currentUser){ alert("Nessun utente loggato!"); window.location.href="index.html"; }
+
 window.onload = function(){
-    if(!currentUser){ alert("Nessun utente loggato!"); window.location.href="index.html"; return;}
     if(currentUser.profile){
         document.getElementById('nick').value=currentUser.profile.nick;
         document.getElementById('tag').value=currentUser.profile.tag;
@@ -39,12 +40,15 @@ function saveProfile(){
     if(avatarFile){
         const reader = new FileReader();
         reader.onload = function(e){
-            currentUser.profile={nick,tag,avatar:e.target.result};
+            currentUser.profile.nick = nick;
+            currentUser.profile.tag = tag;
+            currentUser.profile.avatar = e.target.result;
             saveAndGo();
         }
         reader.readAsDataURL(avatarFile);
     } else {
-        currentUser.profile={nick,tag,avatar: currentUser.profile? currentUser.profile.avatar:""};
+        currentUser.profile.nick = nick;
+        currentUser.profile.tag = tag;
         saveAndGo();
     }
 }
