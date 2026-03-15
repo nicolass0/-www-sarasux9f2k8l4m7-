@@ -9,6 +9,15 @@
 <body>
     <div id="container">
 
+        <!-- POPUP DI AVVISO -->
+        <div id="popup">
+            <div id="popup-content">
+                <h2>Benvenuto sul sito Serpendino Geam</h2>
+                <p>Questo è un sito professionale. Confermi di voler entrare?</p>
+                <button onclick="closePopup()">Accetto</button>
+            </div>
+        </div>
+
         <!-- INTERFACCIA REGISTER / LOGIN -->
         <div id="login-register">
             <h1>Benvenuto al Serpendino Geam</h1>
@@ -36,8 +45,17 @@
     </div>
 
 <script>
-// STORAGE FINTIZIO DEGLI UTENTI
-let users = [];
+// ================== POPUP ==================
+function closePopup(){
+    document.getElementById('popup').style.display = "none";
+}
+
+// ================== GESTIONE UTENTI ==================
+let users = JSON.parse(localStorage.getItem('users')) || [];
+
+function saveUsers(){
+    localStorage.setItem('users', JSON.stringify(users));
+}
 
 function registerUser() {
     const nome = document.getElementById('regNome').value;
@@ -50,8 +68,27 @@ function registerUser() {
         return;
     }
 
+    if(users.find(u => u.email === email)){
+        alert("Utente già registrato!");
+        return;
+    }
+
     users.push({nome, cognome, email, password});
+    saveUsers();
     alert("Registrazione avvenuta con successo!");
+    document.getElementById('regNome').value="";
+    document.getElementById('regCognome').value="";
+    document.getElementById('regEmail').value="";
+    document.getElementById('regPassword').value="";
+}
+
+// Riempie email/password se già salvati
+window.onload = function(){
+    if(users.length>0){
+        const lastUser = users[users.length-1];
+        document.getElementById('loginEmail').value = lastUser.email;
+        document.getElementById('loginPassword').value = lastUser.password;
+    }
 }
 
 function loginUser() {
@@ -69,8 +106,7 @@ function loginUser() {
     }
 }
 
-/* ======= GIOCO SERPENTE ======= */
-
+// ================== GIOCO SERPENTE ==================
 let canvas = document.getElementById('game');
 let ctx = canvas.getContext('2d');
 
@@ -90,7 +126,6 @@ function gameLoop(){
     ctx.fillStyle = "black";
     ctx.fillRect(0,0,canvas.width,canvas.height);
 
-    // Muove serpente
     let head = {...snake[0]};
     if(direction==="RIGHT") head.x++;
     if(direction==="LEFT") head.x--;
@@ -99,22 +134,18 @@ function gameLoop(){
 
     snake.unshift(head);
 
-    // Controlla se mangia cibo
     if(head.x === food.x && head.y === food.y){
         food = {x: Math.floor(Math.random()*20), y: Math.floor(Math.random()*20)};
     } else {
         snake.pop();
     }
 
-    // Disegna serpente
     ctx.fillStyle = "lime";
     snake.forEach(segment => ctx.fillRect(segment.x*20, segment.y*20, 20, 20));
 
-    // Disegna cibo
     ctx.fillStyle = "red";
     ctx.fillRect(food.x*20, food.y*20, 20, 20);
 
-    // Controlla collisioni
     if(head.x<0 || head.x>=20 || head.y<0 || head.y>=20 || snakeCollision(head)){
         alert("Game Over!");
         canvas.style.display = "none";
