@@ -3,24 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Serpendino Geam</title>
+<title>Serpendino Geam - Login/Register</title>
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<!-- POPUP -->
-<div id="popup">
-    <div id="popup-content">
-        <h2>Benvenuto sul sito Serpendino Geam</h2>
-        <p>Questo è un sito professionale. Confermi di voler entrare?</p>
-        <button onclick="closePopup()">Accetto</button>
-    </div>
-</div>
+<div id="container">
 
-<!-- INTERFACCIA LOGIN/REGISTER -->
-<div id="login-register">
     <h1>Benvenuto al Serpendino Geam</h1>
-    
+
     <div id="register-form">
         <h2>Registrati</h2>
         <input type="text" id="regNome" placeholder="Nome">
@@ -36,22 +27,26 @@
         <input type="password" id="loginPassword" placeholder="Password">
         <button onclick="loginUser()">Login</button>
     </div>
-</div>
 
-<!-- AREA GIOCO -->
-<div id="score-container">
-    <span>Punteggio: <span id="score">0</span></span>
 </div>
-<canvas id="game" width="400" height="400"></canvas>
 
 <script>
-// ============== POPUP =================
-function closePopup(){
-    document.getElementById('popup').style.display = "none";
+// ================= UTENTI =================
+let users = JSON.parse(localStorage.getItem('users')) || [];
+
+// Controlla se c'è un utente già registrato
+window.onload = function(){
+    if(users.length>0){
+        document.getElementById('register-form').style.display="none"; // nascondi register
+        document.getElementById('login-form').style.display="block";
+        const lastUser = users[users.length-1];
+        document.getElementById('loginEmail').value = lastUser.email;
+    } else {
+        document.getElementById('register-form').style.display="block";
+        document.getElementById('login-form').style.display="none";
+    }
 }
 
-// ============== UTENTI =================
-let users = JSON.parse(localStorage.getItem('users')) || [];
 function saveUsers(){ localStorage.setItem('users', JSON.stringify(users)); }
 
 function registerUser() {
@@ -59,108 +54,29 @@ function registerUser() {
     const cognome = document.getElementById('regCognome').value;
     const email = document.getElementById('regEmail').value;
     const password = document.getElementById('regPassword').value;
+
     if(!nome||!cognome||!email||!password){ alert("Compila tutti i campi!"); return;}
     if(users.find(u=>u.email===email)){ alert("Utente già registrato!"); return;}
     users.push({nome,cognome,email,password});
     saveUsers();
-    alert("Registrazione avvenuta con successo!");
-    document.getElementById('regNome').value="";
-    document.getElementById('regCognome').value="";
-    document.getElementById('regEmail').value="";
-    document.getElementById('regPassword').value="";
+    alert("Registrazione completata! Effettua il login.");
+    document.getElementById('register-form').style.display="none";
+    document.getElementById('login-form').style.display="block";
+    document.getElementById('loginEmail').value = email;
 }
 
-// Auto-compila se già salvati
-window.onload = function(){
-    if(users.length>0){
-        const lastUser = users[users.length-1];
-        document.getElementById('loginEmail').value = lastUser.email;
-        document.getElementById('loginPassword').value = lastUser.password;
-    }
-}
-
-// Login
 function loginUser(){
     const email = document.getElementById('loginEmail').value;
     const password = document.getElementById('loginPassword').value;
     const user = users.find(u=>u.email===email && u.password===password);
     if(user){
-        document.getElementById('login-register').style.display="none";
-        document.getElementById('game').style.display="block";
-        document.getElementById('score-container').style.display="block";
-        canvas.focus(); // Assicura che il canvas prenda focus per controlli
-        startGame();
-    } else { alert("Email o password errata!"); }
-}
-
-// ============== GIOCO SERPENTE =================
-let canvas = document.getElementById('game');
-let ctx = canvas.getContext('2d');
-
-canvas.style.display="none"; // inizialmente nascosto
-let snake, food, direction, score;
-
-function startGame(){
-    snake=[{x:10,y:10}];
-    direction="RIGHT";
-    food={x:Math.floor(Math.random()*20),y:Math.floor(Math.random()*20)};
-    score=0;
-    document.getElementById('score').innerText=score;
-    document.addEventListener('keydown', changeDirection);
-    canvas.tabIndex = 0; // permette al canvas di ricevere focus
-    canvas.focus();
-    gameLoop();
-}
-
-function gameLoop(){
-    ctx.fillStyle="black";
-    ctx.fillRect(0,0,canvas.width,canvas.height);
-
-    let head={...snake[0]};
-    if(direction==="RIGHT") head.x++;
-    if(direction==="LEFT") head.x--;
-    if(direction==="UP") head.y--;
-    if(direction==="DOWN") head.y++;
-
-    snake.unshift(head);
-
-    if(head.x===food.x && head.y===food.y){
-        food={x:Math.floor(Math.random()*20), y:Math.floor(Math.random()*20)};
-        score++;
-        document.getElementById('score').innerText=score;
+        // Salva email dell’utente loggato
+        localStorage.setItem('currentUser', email);
+        // Vai a game.html
+        window.location.href = "game.html";
     } else {
-        snake.pop();
+        alert("Email o password errata!");
     }
-
-    ctx.fillStyle="lime";
-    snake.forEach(seg=>ctx.fillRect(seg.x*20,seg.y*20,20,20));
-
-    ctx.fillStyle="red";
-    ctx.fillRect(food.x*20, food.y*20, 20,20);
-
-    if(head.x<0||head.x>=20||head.y<0||head.y>=20||snakeCollision(head)){
-        alert("Game Over! Punteggio: "+score);
-        canvas.style.display="none";
-        document.getElementById('score-container').style.display="none";
-        document.getElementById('login-register').style.display="block";
-        return;
-    }
-
-    setTimeout(gameLoop, 200);
-}
-
-function snakeCollision(head){
-    for(let i=1;i<snake.length;i++){
-        if(snake[i].x===head.x && snake[i].y===head.y) return true;
-    }
-    return false;
-}
-
-function changeDirection(e){
-    if(e.key==="w" && direction!=="DOWN") direction="UP";
-    if(e.key==="s" && direction!=="UP") direction="DOWN";
-    if(e.key==="a" && direction!=="RIGHT") direction="LEFT";
-    if(e.key==="d" && direction!=="LEFT") direction="RIGHT";
 }
 </script>
 </body>
