@@ -1,1 +1,15 @@
+function loginUser(){
+    const email = document.getElementById('loginEmail').value.trim();
+    const password = document.getElementById('loginPassword').value;
+    const user = users.find(u => u.email === email && u.password === password);
 
+    if(user){
+        // Salva l'utente loggato
+        localStorage.setItem('currentUser', email);
+
+        // Porta direttamente alla chat
+        window.location.href = "chat.html"; // <--- qui metti il nome del file della tua chat
+    } else {
+        alert("Email o password errata!");
+    }
+}
