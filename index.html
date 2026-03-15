@@ -9,7 +9,6 @@
 <body>
 
 <div id="container">
-
     <h1>Benvenuto al Serpendino Geam</h1>
 
     <div id="register-form">
@@ -31,16 +30,13 @@
 </div>
 
 <script>
-// ================= UTENTI =================
 let users = JSON.parse(localStorage.getItem('users')) || [];
 
-// Controlla se c'è un utente già registrato
 window.onload = function(){
     if(users.length>0){
-        document.getElementById('register-form').style.display="none"; // nascondi register
+        document.getElementById('register-form').style.display="none";
         document.getElementById('login-form').style.display="block";
-        const lastUser = users[users.length-1];
-        document.getElementById('loginEmail').value = lastUser.email;
+        document.getElementById('loginEmail').value = users[users.length-1].email;
     } else {
         document.getElementById('register-form').style.display="block";
         document.getElementById('login-form').style.display="none";
@@ -49,7 +45,7 @@ window.onload = function(){
 
 function saveUsers(){ localStorage.setItem('users', JSON.stringify(users)); }
 
-function registerUser() {
+function registerUser(){
     const nome = document.getElementById('regNome').value;
     const cognome = document.getElementById('regCognome').value;
     const email = document.getElementById('regEmail').value;
@@ -62,7 +58,7 @@ function registerUser() {
     alert("Registrazione completata! Effettua il login.");
     document.getElementById('register-form').style.display="none";
     document.getElementById('login-form').style.display="block";
-    document.getElementById('loginEmail').value = email;
+    document.getElementById('loginEmail').value=email;
 }
 
 function loginUser(){
@@ -70,13 +66,9 @@ function loginUser(){
     const password = document.getElementById('loginPassword').value;
     const user = users.find(u=>u.email===email && u.password===password);
     if(user){
-        // Salva email dell’utente loggato
         localStorage.setItem('currentUser', email);
-        // Vai a game.html
-        window.location.href = "game.html";
-    } else {
-        alert("Email o password errata!");
-    }
+        window.location.href="profile.html";
+    } else { alert("Email o password errata!"); }
 }
 </script>
 </body>
