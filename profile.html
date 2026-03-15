@@ -1,1 +1,59 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Profilo Serpendino Geam</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
 
+<div id="container">
+    <h1>Profilo Utente</h1>
+    <input type="text" id="nick" placeholder="Nickname">
+    <input type="text" id="tag" placeholder="Tag (es: #1234)">
+    <input type="file" id="avatar">
+    <button onclick="saveProfile()">Salva Profilo</button>
+</div>
+
+<script>
+let users = JSON.parse(localStorage.getItem('users')) || [];
+let currentUserEmail = localStorage.getItem('currentUser');
+let currentUser = users.find(u=>u.email===currentUserEmail);
+
+window.onload = function(){
+    if(!currentUser){ alert("Nessun utente loggato!"); window.location.href="index.html"; return;}
+    if(currentUser.profile){
+        document.getElementById('nick').value=currentUser.profile.nick;
+        document.getElementById('tag').value=currentUser.profile.tag;
+    }
+}
+
+function saveProfile(){
+    const nick = document.getElementById('nick').value;
+    const tag = document.getElementById('tag').value;
+    const avatarFile = document.getElementById('avatar').files[0];
+
+    if(!nick||!tag){ alert("Compila tutti i campi!"); return;}
+
+    if(avatarFile){
+        const reader = new FileReader();
+        reader.onload = function(e){
+            currentUser.profile={nick,tag,avatar:e.target.result};
+            saveAndGo();
+        }
+        reader.readAsDataURL(avatarFile);
+    } else {
+        currentUser.profile={nick,tag,avatar: currentUser.profile? currentUser.profile.avatar:""};
+        saveAndGo();
+    }
+}
+
+function saveAndGo(){
+    localStorage.setItem('users', JSON.stringify(users));
+    alert("Profilo salvato! Vai alla chat.");
+    window.location.href="chat.html";
+}
+</script>
+</body>
+</html>
