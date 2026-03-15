@@ -8,7 +8,7 @@
 </head>
 <body>
 
-<!-- POPUP PROFESSIONALE -->
+<!-- POPUP -->
 <div id="popup">
     <div id="popup-content">
         <h2>Benvenuto sul sito Serpendino Geam</h2>
@@ -38,16 +38,19 @@
     </div>
 </div>
 
-<!-- GIOCO SERPENTE -->
+<!-- AREA GIOCO -->
+<div id="score-container">
+    <span>Punteggio: <span id="score">0</span></span>
+</div>
 <canvas id="game" width="400" height="400"></canvas>
 
 <script>
-// ================= POPUP ==================
+// ============== POPUP =================
 function closePopup(){
     document.getElementById('popup').style.display = "none";
 }
 
-// ================= UTENTI ==================
+// ============== UTENTI =================
 let users = JSON.parse(localStorage.getItem('users')) || [];
 function saveUsers(){ localStorage.setItem('users', JSON.stringify(users)); }
 
@@ -56,16 +59,8 @@ function registerUser() {
     const cognome = document.getElementById('regCognome').value;
     const email = document.getElementById('regEmail').value;
     const password = document.getElementById('regPassword').value;
-
-    if(!nome || !cognome || !email || !password){
-        alert("Compila tutti i campi!");
-        return;
-    }
-    if(users.find(u => u.email === email)){
-        alert("Utente già registrato!");
-        return;
-    }
-
+    if(!nome||!cognome||!email||!password){ alert("Compila tutti i campi!"); return;}
+    if(users.find(u=>u.email===email)){ alert("Utente già registrato!"); return;}
     users.push({nome,cognome,email,password});
     saveUsers();
     alert("Registrazione avvenuta con successo!");
@@ -88,29 +83,32 @@ window.onload = function(){
 function loginUser(){
     const email = document.getElementById('loginEmail').value;
     const password = document.getElementById('loginPassword').value;
-    const user = users.find(u => u.email===email && u.password===password);
-
+    const user = users.find(u=>u.email===email && u.password===password);
     if(user){
-        document.getElementById('login-register').style.display = "none";
-        document.getElementById('game').style.display = "block";
+        document.getElementById('login-register').style.display="none";
+        document.getElementById('game').style.display="block";
+        document.getElementById('score-container').style.display="block";
+        canvas.focus(); // Assicura che il canvas prenda focus per controlli
         startGame();
-    } else {
-        alert("Email o password errata!");
-    }
+    } else { alert("Email o password errata!"); }
 }
 
-// ================= GIOCO SERPENTE ==================
+// ============== GIOCO SERPENTE =================
 let canvas = document.getElementById('game');
 let ctx = canvas.getContext('2d');
 
-canvas.style.display = "none"; // nascosto inizialmente
-let snake, food, direction;
+canvas.style.display="none"; // inizialmente nascosto
+let snake, food, direction, score;
 
 function startGame(){
-    snake = [{x:10,y:10}];
-    direction = "RIGHT";
-    food = {x:Math.floor(Math.random()*20), y:Math.floor(Math.random()*20)};
+    snake=[{x:10,y:10}];
+    direction="RIGHT";
+    food={x:Math.floor(Math.random()*20),y:Math.floor(Math.random()*20)};
+    score=0;
+    document.getElementById('score').innerText=score;
     document.addEventListener('keydown', changeDirection);
+    canvas.tabIndex = 0; // permette al canvas di ricevere focus
+    canvas.focus();
     gameLoop();
 }
 
@@ -118,28 +116,32 @@ function gameLoop(){
     ctx.fillStyle="black";
     ctx.fillRect(0,0,canvas.width,canvas.height);
 
-    let head = {...snake[0]};
+    let head={...snake[0]};
     if(direction==="RIGHT") head.x++;
     if(direction==="LEFT") head.x--;
     if(direction==="UP") head.y--;
     if(direction==="DOWN") head.y++;
 
     snake.unshift(head);
+
     if(head.x===food.x && head.y===food.y){
-        food = {x:Math.floor(Math.random()*20), y:Math.floor(Math.random()*20)};
+        food={x:Math.floor(Math.random()*20), y:Math.floor(Math.random()*20)};
+        score++;
+        document.getElementById('score').innerText=score;
     } else {
         snake.pop();
     }
 
     ctx.fillStyle="lime";
-    snake.forEach(seg=>ctx.fillRect(seg.x*20, seg.y*20, 20, 20));
+    snake.forEach(seg=>ctx.fillRect(seg.x*20,seg.y*20,20,20));
 
     ctx.fillStyle="red";
-    ctx.fillRect(food.x*20, food.y*20, 20, 20);
+    ctx.fillRect(food.x*20, food.y*20, 20,20);
 
     if(head.x<0||head.x>=20||head.y<0||head.y>=20||snakeCollision(head)){
-        alert("Game Over!");
+        alert("Game Over! Punteggio: "+score);
         canvas.style.display="none";
+        document.getElementById('score-container').style.display="none";
         document.getElementById('login-register').style.display="block";
         return;
     }
